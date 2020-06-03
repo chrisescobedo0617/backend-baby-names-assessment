@@ -31,6 +31,10 @@ Suggested milestones for incremental development:
  - Fix main() to use the extracted_names list
 """
 
+# Your name, plus anyone who helped you with this assignment
+# Give credit where credit is due.
+__author__ = "chrisescobedo0617"
+
 import sys
 import re
 import argparse
@@ -44,7 +48,22 @@ def extract_names(filename):
     ['2006', 'Aaliyah 91', 'Aaron 57', 'Abagail 895', ...]
     """
     names = []
-    # +++your code here+++
+    names_dict = {}
+    with open(filename) as f:
+        contents = f.read()
+        pattern = re.compile(r'\w+\s\w\w\s(\d+)')
+        second_pattern = re.compile(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>')
+        matches = pattern.finditer(contents)
+        second_matches = second_pattern.finditer(contents)
+        for match in matches:
+            names.append(match.group(1))
+        for s_match in second_matches:
+            if s_match.group(2) not in names_dict:
+                names_dict[s_match.group(2)] = s_match.group(1)
+            if s_match.group(3) not in names_dict:
+                names_dict[s_match.group(3)] = s_match.group(1)
+        for key in sorted(names_dict):
+            names.append(key + ' ' + names_dict[key])
     return names
 
 
@@ -82,8 +101,16 @@ def main(args):
     # Use the create_summary flag to decide whether to print the list
     # or to write the list to a summary file (e.g. `baby1990.html.summary`).
 
-    # +++your code here+++
-
+    for each_file in file_list:
+        mylist = extract_names(each_file)
+        if create_summary:
+            text = '\n'.join(mylist) + '\n'
+            new_filename = each_file + '.summary'
+            nf = open(new_filename, 'w')
+            nf.write(str(text))
+        else:
+            text = '\n'.join(mylist)
+            print(text)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
