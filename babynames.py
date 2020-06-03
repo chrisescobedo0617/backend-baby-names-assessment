@@ -31,6 +31,10 @@ Suggested milestones for incremental development:
  - Fix main() to use the extracted_names list
 """
 
+# Your name, plus anyone who helped you with this assignment
+# Give credit where credit is due.
+__author__ = "chrisescobedo0617"
+
 import sys
 import re
 import argparse
